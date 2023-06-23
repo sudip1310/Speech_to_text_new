@@ -1,10 +1,14 @@
 import streamlit as st
 from streamlit_webrtc import webrtc_streamer, WebRtcMode
+import speech_recognition as sr
 from pydub import AudioSegment
 
 # Initialize the audio_buffer in session_state
 if "audio_buffer" not in st.session_state:
     st.session_state.audio_buffer = AudioSegment.empty()
+
+# Initialize the speech recognizer
+recognizer = sr.Recognizer()
 
 with st.container():
     sample = st.session_state.audio_buffer
@@ -13,6 +17,16 @@ with st.container():
         st.audio(
             sample.export(format="wav", codec="pcm_s16le", bitrate="128k").read()
         )
+        # Perform speech-to-text conversion
+        with st.spinner(text="Performing speech-to-text conversion..."):
+            try:
+                text = recognizer.recognize_google(sample.export(format="wav").read())
+                st.write("Speech-to-Text Conversion Result:")
+                st.write(text)
+            except sr.UnknownValueError:
+                st.write("Unable to recognize speech.")
+            except sr.RequestError as e:
+                st.write(f"Speech recognition request error: {str(e)}")
     else:
         with (record_section := st.container()):
             webrtc_ctx = webrtc_streamer(
