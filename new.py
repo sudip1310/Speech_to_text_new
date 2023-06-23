@@ -46,8 +46,9 @@ with st.container():
                             audio_frames = webrtc_ctx.audio_receiver.get_frames(
                                 timeout=3
                             )
-                        sound_chunk = AudioSegment.empty()
+                        
                         try:
+                            sound_chunk = AudioSegment.empty()
                             for audio_frame in audio_frames:
                                 sound = AudioSegment(
                                     data=audio_frame.to_ndarray().tobytes(),
