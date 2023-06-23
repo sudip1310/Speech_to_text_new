@@ -2,6 +2,7 @@ import streamlit as st
 from streamlit_webrtc import webrtc_streamer, WebRtcMode
 import speech_recognition as sr
 from pydub import AudioSegment
+import queue
 
 # Initialize the audio_buffer in session_state
 if "audio_buffer" not in st.session_state:
