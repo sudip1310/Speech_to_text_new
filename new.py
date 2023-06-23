@@ -43,6 +43,7 @@ with st.container():
             with st.spinner(text="recording..."):
                 while True:
                     if webrtc_ctx.audio_receiver:
+                        audio_frames = []
                         try:
                             audio_frames = webrtc_ctx.audio_receiver.get_frames(
                                 timeout=3
