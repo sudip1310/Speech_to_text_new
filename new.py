@@ -3,8 +3,6 @@ from streamlit_webrtc import webrtc_streamer, WebRtcMode
 import speech_recognition as sr
 from pydub import AudioSegment
 
-
-sound_chunk = AudioSegment.empty()
 # Initialize the audio_buffer in session_state
 if "audio_buffer" not in st.session_state:
     st.session_state.audio_buffer = AudioSegment.empty()
@@ -48,9 +46,10 @@ with st.container():
                             audio_frames = webrtc_ctx.audio_receiver.get_frames(
                                 timeout=3
                             )
-                        
+                        except queue.Empty:
+                            record_section.write("no audio received...")
+                        sound_chunk = AudioSegment.empty()
                         try:
-                            
                             for audio_frame in audio_frames:
                                 sound = AudioSegment(
                                     data=audio_frame.to_ndarray().tobytes(),
