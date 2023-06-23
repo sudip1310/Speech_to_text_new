@@ -76,7 +76,7 @@ trained on American English is being served.
 
     if app_mode == sound_only_page:
         app_sst(
-            str(lm_alpha, lm_beta, beam
+            lm_alpha, lm_beta, beam
         )
    
 
