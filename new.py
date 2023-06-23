@@ -2,6 +2,10 @@ import streamlit as st
 from streamlit_webrtc import webrtc_streamer, WebRtcMode
 from pydub import AudioSegment
 
+# Initialize the audio_buffer in session_state
+if "audio_buffer" not in st.session_state:
+    st.session_state.audio_buffer = AudioSegment.empty()
+
 with st.container():
     sample = st.session_state.audio_buffer
     audio_available = sample != AudioSegment.empty()
@@ -41,7 +45,7 @@ with st.container():
                                 )
                                 sound_chunk += sound
                             if len(sound_chunk) > 0:
-                                session_state.audio_buffer += sound_chunk
+                                st.session_state.audio_buffer += sound_chunk
                         except UnboundLocalError:
                             # UnboundLocalError when audio_frames is not set
                             record_section.write("no audio detected...")
